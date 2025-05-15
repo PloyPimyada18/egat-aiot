@@ -32,6 +32,13 @@ const HistoricalDataPage = () => {
     "sensor_temp_reactor",
   ];
 
+  // Convert local datetime to UTC
+  const convertToUTC = (localDateTime: string) => {
+    if (!localDateTime) return "";
+    const date = new Date(localDateTime);
+    return date.toISOString();
+  };
+
   /**
    * Fetches sensor data from selected collections for the selected device and date range,
    * merges them by timestamp, and formats the result as a CSV string.
@@ -48,8 +55,8 @@ const HistoricalDataPage = () => {
           `http://localhost:3000/api/sensor-data/${collection}/filter`,
           {
             params: {
-              start: startDate,
-              end: endDate,
+              start: convertToUTC(startDate),
+              end: convertToUTC(endDate),
               device_id: selectedDeviceId,
             },
           }
@@ -64,7 +71,7 @@ const HistoricalDataPage = () => {
             // Create a new entry for this timestamp
             timestampMap.set(timestamp, {
               timestamp: item.timestamp,
-              device_id: item.metadata.device_id,
+              device_id: item.device_id,
               [collection]: item.value,
             });
           } else {
@@ -190,7 +197,8 @@ const HistoricalDataPage = () => {
                 htmlFor="startDate"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Start Date and Time
+                Start Date and Time (Local Time -{" "}
+                {Intl.DateTimeFormat().resolvedOptions().timeZone})
               </label>
               <input
                 type="datetime-local"
@@ -206,7 +214,8 @@ const HistoricalDataPage = () => {
                 htmlFor="endDate"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                End Date and Time
+                End Date and Time (Local Time -{" "}
+                {Intl.DateTimeFormat().resolvedOptions().timeZone})
               </label>
               <input
                 type="datetime-local"

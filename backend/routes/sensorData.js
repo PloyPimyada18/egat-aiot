@@ -57,7 +57,7 @@ router.get('/:collection/filter', async (req, res) => {
       if (end) filter.timestamp.$lte = new Date(end);
     }
     if (device_id) {
-      filter['metadata.device_id'] = device_id;
+      filter.device_id = device_id;
     }
     const data = await Model.find(filter);
     res.json(data);
@@ -80,11 +80,11 @@ router.get('/latest-all/:device_id', async (req, res) => {
 
   for (const collection of collections) {
     const Model = getSensorModel(collection);
-    const latest = await Model.findOne({ "metadata.device_id": deviceId }).sort({ timestamp: -1 });
+    const latest = await Model.findOne({ device_id: deviceId }).sort({ timestamp: -1 });
     if (latest) {
       result[collection] = {
         value: latest.value,
-        unit: latest.metadata.unit
+        unit: latest.unit
       };
     }
   }

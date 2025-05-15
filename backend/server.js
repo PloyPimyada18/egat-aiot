@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const { Client } = require('pg');
 
 const app = express();
 
@@ -11,10 +12,27 @@ app.use(cors());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
-  dbName: 'chlorella_aiot'
+  dbName: 'chlorella-aiot-cluster'
 })
-  .then(() => console.log('Connected to MongoDB - chlorella_aiot database'))
+  .then(() => console.log('Connected to MongoDB - chlorella-aiot-cluster database'))
   .catch((err) => console.error('MongoDB connection error:', err));
+
+// PostgreSQL Connection Test
+const pgClient = new Client({
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+});
+
+pgClient.connect(err => {
+  if (err) {
+    console.error('PostgreSQL connection error:', err.stack);
+  } else {
+    console.log('Connected to PostgreSQL database successfully!');
+  }
+});
 
 // Routes
 const sensorDataRouter = require('./routes/sensorData');
