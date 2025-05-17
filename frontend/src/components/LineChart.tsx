@@ -93,7 +93,7 @@ const LineChart: React.FC<LineChartProps> = ({
         const { startDate, endDate } = getDateRange(timeRange);
         const collection = field;
         const response = await axios.get(
-          `http://localhost:3000/api/sensor-data/${collection}/filter`,
+          `https://egat-aiot-data.onrender.com/api/sensor-data/${collection}/filter`,
           {
             params: {
               start: startDate.toISOString(),
@@ -120,7 +120,7 @@ const LineChart: React.FC<LineChartProps> = ({
         } else if (type === "double" && field2) {
           const collection2 = field2;
           const response2 = await axios.get(
-            `http://localhost:3000/api/sensor-data/${collection2}/filter`,
+            `https://egat-aiot-data.onrender.com/api/sensor-data/${collection2}/filter`,
             {
               params: {
                 start: startDate.toISOString(),

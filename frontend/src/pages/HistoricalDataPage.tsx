@@ -52,7 +52,7 @@ const HistoricalDataPage = () => {
       try {
         // Fetch filtered data for the current collection
         const response = await axios.get(
-          `http://localhost:3000/api/sensor-data/${collection}/filter`,
+          `https://egat-aiot-data.onrender.com/api/sensor-data/${collection}/filter`,
           {
             params: {
               start: convertToUTC(startDate),

@@ -27,7 +27,7 @@ const SensorDataPage: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/api/sensor-data/latest-all/${selectedDeviceId}`
+          `https://egat-aiot-data.onrender.com/api/sensor-data/latest-all/${selectedDeviceId}`
         );
         setSensorData(response.data);
         setError(null);
