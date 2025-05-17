@@ -159,7 +159,11 @@ const LineChart: React.FC<LineChartProps> = ({
         setLoading(false);
       }
     };
-    fetchData();
+
+    fetchData(); // Initial fetch
+    // Set up polling every 30 seconds
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval); // Cleanup on unmount
   }, [deviceId, timeRange, field, field2, type, dataLimit]);
 
   // Slice the data for the current window

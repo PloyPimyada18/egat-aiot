@@ -3,6 +3,25 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const sensorDataSchema = require('../models/sensorData').schema;
 
+// List of all sensor collections
+const SENSOR_COLLECTIONS = [
+  "sensor_co2_inflow",
+  "sensor_co2_outflow",
+  "sensor_ec_reactor",
+  "sensor_humid_inflow",
+  "sensor_humid_outflow",
+  "sensor_o2_inflow",
+  "sensor_o2_outflow",
+  "sensor_orp_reactor",
+  "sensor_ph_reactor",
+  "sensor_so2_inflow",
+  "sensor_so2_outflow",
+  "sensor_tds_reactor",
+  "sensor_temp_inflow",
+  "sensor_temp_outflow",
+  "sensor_temp_reactor"
+];
+
 // Helper to get model for any collection
 function getSensorModel(collectionName) {
   return mongoose.model(collectionName, sensorDataSchema, collectionName);
@@ -68,17 +87,10 @@ router.get('/:collection/filter', async (req, res) => {
 
 // GET latest sensor data for all collections for a given device_id (node)
 router.get('/latest-all/:device_id', async (req, res) => {
-  const collections = [
-    "sensor_co2_inflow", "sensor_co2_outflow", "sensor_ec_reactor",
-    "sensor_humid_inflow", "sensor_humid_outflow", "sensor_o2_inflow",
-    "sensor_o2_outflow", "sensor_orp_reactor", "sensor_ph_reactor",
-    "sensor_so2_inflow", "sensor_so2_outflow", "sensor_tds_reactor",
-    "sensor_temp_inflow", "sensor_temp_outflow", "sensor_temp_reactor"
-  ];
   const deviceId = req.params.device_id;
   const result = {};
 
-  for (const collection of collections) {
+  for (const collection of SENSOR_COLLECTIONS) {
     const Model = getSensorModel(collection);
     const latest = await Model.findOne({ device_id: deviceId }).sort({ timestamp: -1 });
     if (latest) {

@@ -72,6 +72,7 @@ const HistoricalDataPage = () => {
             timestampMap.set(timestamp, {
               timestamp: item.timestamp,
               device_id: item.device_id,
+              batch_no: item.batch_no,
               [collection]: item.value,
             });
           } else {
@@ -90,8 +91,13 @@ const HistoricalDataPage = () => {
       return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
     });
 
-    // CSV headers: timestamp, device_id, then all selected collection names
-    const headers = ["timestamp", "device_id", ...selectedCollections];
+    // CSV headers: timestamp, device_id, batch_no, then all selected collection names
+    const headers = [
+      "timestamp",
+      "device_id",
+      "batch_no",
+      ...selectedCollections,
+    ];
     const csvRows = [headers.join(",")];
 
     // Format each row for the CSV
